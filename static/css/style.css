@@ -1,0 +1,293 @@
+body{
+    font-family:"Helvetica", serif;
+    background-color:white;
+}
+
+header {
+    margin-bottom: 51px;
+}
+
+footer {
+    background-color: #E45635;
+    padding: 40px 30px 20px 30px;
+    color: white;
+}
+
+footer .panel-body, footer .list-group{
+    background-color: white;
+    color: black;
+}
+.highlight {
+    background-color: yellow;
+}
+
+.about h1{
+    color: #F7A21B;
+    font-size:96px;
+    font-weight: bold;
+}
+
+.about h2{ font-size: 64px; }
+
+.codeofconduct{
+    background-color: black;
+    color: white;
+    padding-top:40px;
+    padding-bottom:40px;
+}
+
+.codeofconduct h1, #colophon h1{
+    color:#F7A21B;
+    font-size:72px;
+    font-weight: bold;
+}
+
+.codeofconduct h2{ color: #F7A21B; }
+
+#colophon h1 {
+    color: white;
+    background-color: #F7A21B;
+    padding: 20px 0;
+}
+
+#colophon h2{
+    color: black;
+    background-color: rgba(247, 162, 27, 0.7);
+    padding: 15px;
+}
+#colophon section{ font-size: 24px; }
+
+.events {
+    background-color: #F7A21B;
+    padding:20px 0 30px 0;
+}
+.events h1{
+    color:white;
+    font-size:35px;
+    font-weight: bold;
+}
+.events section{
+    font-size:18px;
+    font-weight: bold;
+}
+
+.events .highlight{
+    background-color:black;
+    color:white;
+}
+
+.flex-get-involved-container, .flex-companies-container, .flex-supporters-container, .flex-events-container, .flex-howtohelp-container {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-wrap: wrap;
+    flex-wrap: wrap;   
+}
+
+.flex-get-involved-container, .flex-supporters-container, .flex-howtohelp-container {
+     -webkit-align-items: center;
+    align-items: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+}
+
+.flex-companies-container, .flex-supporters-container {
+    background-image: url("/static/images/navy_blue.png");
+}
+
+/* Contains overall supports and sponsors with events*/
+.flex-companies-item {
+    width: 180px;
+    margin-left: 20px;
+    margin-top: 20px;
+}
+
+.flex-companies-item div.caption {
+    height: 80px;
+}
+.flex-supporters-item {
+    width: 350px;
+    margin: 10px;
+    padding: 10px;
+}
+
+.advisor {
+    width: 200px;
+    height: 200px;
+}
+
+.founder {
+    height: 310px;
+    /*padding-bottom: 10px;*/
+}
+
+.mentor, .organiser{
+    height: 120px;
+}
+.mentor {
+    width: 150px;
+}
+
+/* How to help section in chapters page */
+.flex-howtohelp-container {
+    margin: 20px
+}
+.flex-howtohelp-item {
+    border: 1px solid grey;
+    padding: 10px 20px 20px 20px;
+    /*margin: 10px 20px;*/
+}
+
+.flex-howtohelp-item.explanation {
+    width: 1024px;
+}
+
+/*Just the events supported by sponsor*/
+.flex-events-item {
+    width: 250px;
+    margin-left: 20px;
+}
+
+
+.flex-get-involved-container {
+    -webkit-align-items: stretch;
+    align-items: stretch;
+    padding: 30px 0;
+}
+
+.flex-get-involved-item {
+    background-color: white;
+    width: 280px;
+    padding: 10px 20px;
+    margin: 10px;
+}
+
+#chapter, .panel-heading.chapter { background-color: #F7A21B; }
+
+
+#chapter h2, #chapter h3{ font-weight: bold; }
+
+h1#chapters, h1#resources, h1#sponsors{
+    background-color: rgba(247, 162, 27, 1);
+    color:white;
+    font-size: 72px;
+    font-weight: bold;
+    padding: 10px;
+
+}
+
+/*h1#chapters, h1#resources, #get_involved h1{
+    text-shadow: 1px 1px 0 #000,
+     -1px -1px 0 #000,
+      1px -1px 0 #000,
+      -1px 1px 0 #000,
+       1px 1px 0 #000;
+}*/
+
+#get_involved h1 {
+    color:white;
+    background-color: rgba(247, 162, 27, 0.7);
+    padding: 20px;
+}
+
+#chapter .thumbnail{
+    margin-top: 30px;
+    height:350px;
+    padding-bottom: 20px;
+}
+
+.chapter-news{background-color: #B1843F;}
+
+h1.chapter-news{
+    color:white;
+    padding:10px;
+}
+div.chapter-news{
+    opacity:0.8;
+    color:white;
+    margin-top:-10px;
+    padding:10px;
+}
+
+.chapter-news a:link, .chapter-past-events a:link{color:white;}      /* unvisited link */
+.chapter-news a:visited, .chapter-past-events a:visited{color:white;}  /* visited link */
+.chapter-news a:hover, .chapter-past-events a:hover{color:black; background-color:yellow; }  /* mouse over link */
+.chapter-news a:active, .chapter-past-events a:active{color:white; }  /* selected link */
+
+.chapter-past-events{
+    background-color: #6E4606;
+    color:white;
+}
+h1.chapter-past-events, .past-events h2{
+    color:white;
+    padding:10px;
+    margin-top:0;
+}
+div.chapter-past-events{
+    opacity: 0.8;
+    margin-top:-10px;
+    padding:10px;
+}
+
+.other-chapters{
+    background: black;
+    color: white;
+    margin-top: 0;
+    padding: 10px;
+}
+
+div.other-chapters{
+    margin-top: -10px;
+    opacity: 0.8;
+}
+
+.resources h1{
+    background-color: rgba(247, 162, 27, 0.8);
+    padding: 20px;
+    margin-top: 0;
+    color: white;
+    text-shadow: 1px 1px 3px #000000;
+}
+
+.resources h2 {
+    background-color: rgba(247, 162, 27, 0.6);
+    padding: 10px;
+    margin-top: -10px;
+
+}
+.resources div+h1, .resources div+h2{ margin-top: 10px; }
+.resources #disqus h1 { margin-top: 10px; }
+.resources .panel-heading{ background-color: rgba(247, 162, 27, 0.6); }
+
+/*CODE OF CONDUCT*/
+.conduct-head{ background-color: #F7A21B; }
+.conduct-head h1{
+    color: white;
+    font-size:96px;
+    font-weight: bold;
+}
+
+#coc #full{ background-color: #E4E4E4; }
+#coc #info{ background-color: #F1F1F1; }
+#coc #contact_otherinfo{ color: white;}
+
+/* Background image, just add top:XXpx, see about-peeps as example */
+.bg-image{
+    position: absolute;
+    right:0;
+    bottom:0;
+    left:0;
+    background-image: url("/static/images/navy_blue.png");
+    z-index: -1;
+    height: 105%;
+    width: 100%;
+}
+.about-peeps{
+    padding-top:10px;
+    padding-bottom:10px;
+    margin-bottom:-10px;
+}
+
+.about-peeps .bg-image{
+    top:0;
+    margin-bottom:-20px;
+}

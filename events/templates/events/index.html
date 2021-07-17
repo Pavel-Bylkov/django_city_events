@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block title %}Events{% endblock %}
+
+{% load staticfiles %}
+{% load event_filters %}
+
+{% block extracss %}
+
+<link rel="stylesheet" href="{% static 'events/css/style.css' %}" />
+
+{% endblock %}
+
+
+{% load my_md %}
+
+
+{% block content %}
+
+
+<h1 id="events" class="text-center tk-cooper-black-std">Current Events</h1>
+<div class="container-fluid">
+
+    <div class="row events">
+
+    {% if current_events %}
+        {% for event in current_events %}
+        {% url 'events:event_detail' slug=event.slug event_id=event.id as the_url %}
+        <div class="col-md-2"></div>
+        <div class="col-md-10">
+            <h2 class="tk-cooper-black-std"> <a href="{{ the_url }}">{{event.title}}</a> <small>{% for level in event.level_type.all %}<span class="label label-info">{{ level }}</span> {% endfor %} {% if event.is_cancelled %}<span class="label label-danger">Cancelled</span>{% endif %}</small></h2>
+            <div class="row">
+                <section class="col-md-8">
+                    <span class="glyphicon glyphicon-map-marker"></span> <span class="highlight">{{event.location.city|title}}</span> <span class="glyphicon glyphicon-play"></span>  <span class="glyphicon glyphicon-calendar"></span> <span class="highlight">{{event.start_datetime|date:"D, dS M Y"}} {{ event.start_datetime|time:"H:i e" }}</span> </span> <span class="glyphicon glyphicon-play"></span> <span class="glyphicon glyphicon-time"></span> {{ event.start_datetime|timeuntil }} left
+                </section>
+            </div>
+            <div class="row">
+                <section class="col-md-7">
+                {% if event.short_description %}
+                    {{event.short_description|md|safe}}
+                {% else %}
+                    {{event.description|md|safe|truncatewords:30}}
+                {% endif %}
+                <p>EUR{{event.cost}}</p>
+                </section>
+                <section class="col-md-2">
+                <a href="{{ the_url }}" class="btn btn-success btn-lg" role="button">Details <span class="glyphicon glyphicon-chevron-right"></span></a>
+                </section>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="col-md-12 col-md-offset-1">
+            <h1><span class="glyphicon glyphicon-wrench"></span> We are working on bringing you more workshops.</h1>
+            <p>
+                Come back and check again soon. Keep up-to-date via <a href="https://twitter.com/codinggrace">@CodingGrace</a>, <a href="https://groups.google.com/forum/#!forum/coding-grace">mailing list</a>, or <a href="https://www.facebook.com/pages/Coding-Grace/501098363273457">Facebook page</a>.
+            </p>
+        </div>
+
+    {% endif %}
+    </div>
+</div>
+
+<h1 id="past-events" class="text-center tk-cooper-black-std">Past Events</h1>
+<div class="past-events">
+    {% for year_event in past_events %}
+    <h2 class="text-center tk-cooper-black-std">{{year_event.0}}</h2>
+    <div class="flex-events-container">
+        {% for monthly_event in year_event.1 %}
+        <div class="flex-event-item">
+            <div class="row past-events-months">
+                <h3>{{monthly_event.0|capfirst}}</h3>
+                <ul>
+                    {% for event in monthly_event.1 %}
+                    {% url 'events:event_detail' slug=event.slug event_id=event.id as the_url %}
+                    <li>
+                        {% if event.is_cancelled %}<span class="label label-danger">Cancelled</span>{% endif %} <a href="{{ the_url }}">{{event.title}}</a> <small>({{event.location.city|title}})</small>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        {% empty %}
+        <div class="flex-event-item">
+            <h4>No past events so far.</h4>
+        </div>
+        {% endfor %}
+        
+    </div>        
+    {% endfor %}    
+</div>
+
+{% endblock %}

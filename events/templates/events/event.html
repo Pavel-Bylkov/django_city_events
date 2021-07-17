@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+
+{% block title %}{{event.title}}{% endblock %}
+
+
+{% load staticfiles %}
+{% block extracss %}
+
+<link rel="stylesheet" href="{% static 'events/css/style.css' %}" />
+
+{% if tito_css %}{{tito_css|safe}}{% endif %}
+
+{% endblock %}
+
+{% load my_md %}
+
+{% block content %}
+<h1 id="events" class="text-center tk-cooper-black-std">{{event.title}}</h1>
+<div class="container-fluid">
+    {% if event %}
+
+        <div class="row event">
+            <div class="col-md-5 col-md-offset-1" id="description">
+                {% if event.is_cancelled %}
+                <h3 class="alert alert-danger text-center" role="alert">CANCELLED</h3>
+                {% endif %}
+
+                <section class="event-date-time">
+                    <span class="glyphicon glyphicon-map-marker"></span> <strong>{{event.location.venue}}</strong>, {{event.location.address1}}{% if event.location.address2 %}, {{event.location.address2}}{% endif %}, {{event.location.city|capfirst}}
+                    <br/>
+                    <span class="glyphicon glyphicon-calendar"></span> {{event.start_datetime|date:"D, dS M Y"}} {{ event.start_datetime|time:"H:i" }} till {{ event.end_datetime|time:"H:i" }}
+
+                </section>
+                {% if not workshop_ended %}
+                <h3><span class="glyphicon glyphicon-time"></span> {{ event.start_datetime|timeuntil }} left to reserve your place.</h3>
+                {% endif %}
+
+                <h2>Workshop details <small> {% for level in event.level_type.all %}<span class="label label-info">{{ level }}</span> {% endfor %}</small></h2>
+
+                <h4><span class="glyphicon glyphicon-euro"></span> {{event.cost}}</h4>
+
+                {{event.description|md|safe}}
+
+                <h3><a href="/resources/"><span class="glyphicon glyphicon-wrench"></span> Useful resources</a></h3>
+
+            </div>
+            <div class="col-md-6">
+                {% if not workshop_ended %}
+                    {% if event.embed_ticket or tito_form %}
+                        {% if event.embed_ticket %}
+                            {{ event.embed_ticket|md|safe }}
+                        {% endif %}
+                        {% if tito_form %}
+                            {{ tito_form|safe }}
+                        {% endif %}
+                    {% else %}
+                        <h2><span class="glyphicon glyphicon-asterisk"></span> Tickets coming soon</h2>
+                    {% endif %}
+                {% else %}
+                    <h1 class="ended">Ticket sales have ended.</h1>
+                {% endif %}
+
+                {% if event.sponsorship.all %}
+                    <h2><span class="glyphicon glyphicon-heart-empty"></span> Thank you <span class="glyphicon glyphicon-heart-empty"></span></h2>
+                    {% for s in event.sponsorship.all %}
+                    <h2>{{s.sponsor.name}} <small>for {{s.sponsorship_type}}</small></h2>
+
+                    {{s.sponsor.blurb|md|safe}}
+
+                    <p><span class="glyphicon glyphicon-link"></span> <a href="{{s.sponsor.url}}">{{s.sponsor.url}}</a></p>
+                    {% endfor %}
+                {% endif %}
+                <h2><span class="glyphicon glyphicon-star-empty"></span> Want to sponsor us? <span class="glyphicon glyphicon-star-empty"></span></h2>
+                <p>Contact <strong>{{event.organiser}}</strong> at <strong>{{event.organiser.email}}</strong></p>
+            </div>
+        </div>
+
+        <div class="row event" id="faq">
+            <div class="col-md-5 col-md-offset-1">
+                {% include "disqus_common.html" %}
+            </div>
+            <div class="col-md-5">
+                <h1 >FAQ</h1>
+                <h3>Q. A lot of our events are female-friendly events, we have enquiries asking if other genders are welcome as well?</h3>
+                <p><strong>YES.</strong> You are welcome. Events we run or partner in are diversity friendly.</p> 
+                <p>If you have any questions, feel free to contact us at <a href="mailto:contact@codinggrace.com">contact@codinggrace.com</a>.</p>
+
+                {% if event.faq %}
+                {{event.faq|md|safe}}
+                {% endif %}
+
+                <h1>Refunds <small>(Only applicable if this is a PAID event)</small></h1>
+                <p>Full refunds until 24 hours before the event.</p>
+                <p>If there are not enough people signed up to the event, I will be in touch to refund you.</p>
+
+                <h1>If you have any other questions</h1>
+                <p>You can contact <strong>{{event.organiser}}</strong> by emailing <a href="mailto:{{event.organiser.email}}">{{event.organiser.email}}</a>.</p>
+            </div>
+        </div>
+
+        {% if news %}
+        <div class="row" id="related-news">
+
+            <div class="col-md-10 col-md-offset-1">
+                <h1 >RELATED NEWS</h1>
+                {% for news_item in news %}
+                    {% url 'news:news_article' slug=news_item.slug year=news_item.published.year month=news_item.published.month day=news_item.published.day as the_url %}
+                    <h2><a href="{{the_url}}"><span class="glyphicon glyphicon-link"></span> {{news_item}}</a> <small>by {{news_item.author}}</h2>
+                    {{news_item.short_description|md|safe}}
+                {% endfor %}
+
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="row event">
+            <div class="col-md-12">
+                <section class="about-peeps">
+                    <div class="bg-image"></div>
+
+
+                    <div class="row about-peeps-desc">
+                        <div class="col-md-5 col-md-offset-1">
+                            <h2><span class="glyphicon glyphicon-user"></span> Mentors</h2>
+                            {% for mentor in event.mentors.all %}
+                            {% if mentor.user %}
+                                <h3>{{mentor.user.first_name}} {{mentor.user.last_name}} {%if mentor.user.url %}<small><span class="glyphicon glyphicon-link"></span> <a href="{{mentor.user.url}}">{{mentor.user.url}}</a></small>{% endif %}</h3>
+                                <p>{{mentor.user.blurb|md|safe}}</p>
+                            {% else %}
+                                <h3>{{mentor.first_name}} {{mentor.last_name}} {% if mentor.url %}<small><span class="glyphicon glyphicon-link"></span> <a href="{{mentor.url}}">{{mentor.url}}</a></small>{% endif %}</h3>
+                                <p>{{mentor.blurb|md|safe}}</p>
+                            {% endif %}
+
+                            {% endfor %}
+                        </div>
+                         <div class="col-md-5">
+                            <section class="organiser">
+                                <h2><span class="glyphicon glyphicon-info-sign"></span> Organiser</h2>
+                                <p>{% if event.organiser.url %}<a href="{{event.organiser.url}}">{{event.organiser}}</a>{% else %}{{event.organiser}}{% endif %} {% if event.organiser.contact_number%}|| <span class="glyphicon glyphicon-phone-alt"></span> {{event.organiser.contact_number}}{% endif %} || <span class="glyphicon glyphicon-envelope"></span> {{event.organiser.email}}</p>
+                            </section>
+                            <h2>About Coding Grace</h2>
+                            <p>
+                                Coding Grace are a group of developers based in Ireland who love to code and do other geeky and not necessarily crafty activities. Some of us code full-time, or just for fun (or both). We have people who are part of other technical user groups such as Dublin ALT.NET, GameCraft, Python Ireland, Ruby Ireland and more&hellip;<br />We provide female-friendly workshops and events in an environment for developers and aspiring developers mentored by majority female instructors.<br />We aim to provide a support network for people from all backgrounds and hope our outreach will help bring those who are interested in code development together and learn from one another.
+                            </p>
+
+                        </div>
+                    </div>
+                </section>
+
+
+            </div>
+        </div>
+    {% else %}
+        <h1>Whoops, no event here</h1>
+    {% endif %}
+
+
+
+    </div>
+</div>
+{% endblock %}
+
+
+{% block extrajs %}
+    {% if tito_js %}{{tito_js|safe}}{% endif %}
+{% endblock %}

@@ -1,0 +1,158 @@
+.flex-events-container {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-justify-content: space-around;
+    justify-content: space-around;
+    margin-left:20px;
+    margin-right:20px;
+}
+
+.flex-event-item {
+    margin: 10px;
+    width: 200px;
+}
+
+h1#events, h1#past-events{
+    background-color: #A16609;
+    margin-top:0;
+    /*margin-bottom:-5px;*/
+    padding: 20px 0;
+    color:white;
+    font-size: 72px;
+    font-weight: bold;
+}
+
+
+.event {margin-bottom:5px;}
+.event h1{
+    background: #F7A21B;
+    color: white;
+    font-weight: bold;
+    padding: 20px;
+}
+
+.event address{
+    background: black;
+    color: white;
+    padding: 10px 0 10px 20px;
+}
+
+.ended {
+    margin-top:0px;
+}
+
+#related-news {
+    background-color: #F8C066;
+}
+#related-news h1{
+    color:white;
+    font-weight: bold;
+}
+.event#faq{
+    background-color:#F6F6F6;
+    margin-bottom:-20px;
+    padding-bottom:20px;
+}
+
+.event#faq h1{
+    padding:0;
+    /*margin:0;*/
+    background-color: #F6F6F6;
+    color:black;
+}
+
+.event#faq a:link {color:black; text-decoration:underline;}
+.event#faq a:visited {color:black; text-decoration:underline;}
+.event#faq a:hover {color:black; background-color:yellow; text-decoration:underline;}
+.event#faq a:active {color:black; text-decoration:underline;}
+
+.events h2 a:link {color:black; text-decoration:underline;}
+.events h2 a:visited {color:black; text-decoration:underline;}
+.events h2 a:hover {color:black; background-color:yellow; text-decoration:underline;}
+.events h2 a:active {color:black; text-decoration:underline;}
+
+.events {
+    margin-top:-10px;
+}
+
+.events small{
+    color:white;
+}
+h1#past-events{
+    background-color: #A16609;
+    opacity: 0.8;
+}
+
+.past-events{
+    /*background-color: #A16609;*/
+    /*margin-top:5px;*/
+    /*color:white;*/
+}
+
+.past-events h2{
+    background-color: rgba(161, 102, 9, 0.5);
+    margin-top: -10px;
+    padding: 10px;
+}
+
+.past-events h3{
+    /*background-color: green;*/
+    margin-top: 0;
+}
+
+.past-events-months ul+div{
+    background-color: yellow;
+}
+
+#description .event-date-time{
+    border: 5px double #F7A21B;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #E45635;
+    color: white;
+}
+
+/* Background image, just add top:XXpx, see about-peeps as example */
+.bg-image{
+    position: absolute;
+    right:0;
+    bottom:0;
+    left:0;
+    background-image: url("/static/images/navy_blue.png");
+    opacity:0.8;
+    z-index: -1;
+    height: 105%;
+    width: 100%;
+}
+
+.about-peeps{
+   /* margin-top:5px;*/
+    padding-top:10px;
+    padding-bottom:10px;
+    /*background-color: red;*/
+    margin-bottom:-10px;
+
+}
+
+.about-peeps .bg-image{
+    top:0;
+    margin-bottom:-20px;
+    /*margin-top:5px;*/
+}
+
+.about-peeps-desc{
+    opacity:10;
+    z-index: 4;
+    color:white;
+}
+
+.about-peeps-desc a:link, .organiser a:link, #description .event-date-time a:link {color:white; text-decoration:underline;}      /* unvisited link */
+.about-peeps-desc a:visited, .organiser a:visited, #description .event-date-time a:visited {color:white; text-decoration:underline;}  /* visited link */
+.about-peeps-desc a:hover, .organiser a:hover, #description .event-date-time a:hover {color:black; background-color:yellow; text-decoration:underline;}  /* mouse over link */
+.about-peeps-desc a:active, .organiser a:active, #description .event-date-time a:active {color:white; text-decoration:underline;}  /* selected link */
+
+.organiser{
+    color: white;
+}

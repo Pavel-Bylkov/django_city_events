@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+
+{% load my_md %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row events">
+    {% if events_list %}
+        {% for event in events_list %}
+        <div class="col-md-2"></div>
+        <div class="col-md-9">
+            <h1 class="tk-cooper-black-std"><a href="{% url 'events:event_detail' event.slug event.id %}"><span class="glyphicon glyphicon-bullhorn"></span> {{event.title}}</a> {% if event.is_cancelled %}<span class="label label-danger">Cancelled</span>{% endif %}</h1>
+            <h1><span class="glyphicon glyphicon-time"></span> {{ event.start_datetime|timeuntil }} left</h1>
+            <div class="row">
+                <section class="col-md-9">
+
+                    {% for topic in event.topics.all %}<span class="label label-info">{{ topic }}</span> {% endfor %} <span class="glyphicon glyphicon-play"></span> <span class="glyphicon glyphicon-map-marker"></span> <a href="/loc/{{event.location.city}}">{{event.location.city|title}}</a> <span class="glyphicon glyphicon-play"></span>  <span class="glyphicon glyphicon-calendar"></span> <span class="">{{event.start_datetime|date:"D, dS M Y"}} {{ event.start_datetime|time:"H:i e" }}</span>  <span class="glyphicon glyphicon-play"></span>
+                </section>
+            </div>
+            <div class="row">
+                <section class="col-md-8">
+
+                {% if event.short_description %}
+                    <p>{{event.short_description|md|safe}}</p>
+                {% else %}
+                    <p>{{event.description|md|safe|truncatewords:30}}</p>
+                {% endif %}
+                </section>
+                <section class="col-md-2 ">
+                    <a href="{% url 'events:event_detail' event.slug event.id %}" class="btn btn-success btn-lg" role="button">More Details</a>
+                </section>
+            </div>
+        </div>
+
+
+        {% endfor %}
+    {% else %}
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <h1 class="text-center"><span class="glyphicon glyphicon-info-sign"></span> We have more events coming up, watch this space.</h1>
+        </div>
+    </div>
+    {% endif %}
+    </div>
+</div>
+
+{% include "django_city_events/about.html" %}
+
+
+{% endblock %}
