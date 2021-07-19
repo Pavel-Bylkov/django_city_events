@@ -6,10 +6,22 @@ from django.contrib.auth.context_processors import auth
 from django.utils.timezone import now
 
 from .models import Event, EventFilters, User, Location, City, Topics
-from .forms import EventFiltersForm
+from .forms import EventFiltersForm, EventForm
 
 
 def index(request):
+    actual_start = now() - datetime.timedelta(days=1)
+    actual_end = now() + datetime.timedelta(days=30)
+    events_list = Event.objects.filter(is_published=True).filter(
+        start_datetime__range=(actual_start, actual_end)).order_by('start_datetime')
+    events_past = Event.objects.filter(is_published=True).filter(
+        start_datetime__lte=actual_start).order_by('-start_datetime')
+    context = {'events_list': events_list, 'events_past': events_past,
+               'active': 'events', 'bootstrap': 3}
+    return render(request, 'events/index.html', context)
+
+
+def event_filter(request):
     actual_start = now() - datetime.timedelta(days=1)
     actual_end = now() + datetime.timedelta(days=30)
     locations_list = Location.objects.all()
@@ -32,26 +44,26 @@ def index(request):
                 filter = EventFilters.objects.create(
                     user=auth(request)['user'],
                     city=bound_form.cleaned_data['city'],
-                    topics=bound_form.cleaned_data['topics'],
                     start_range=bound_form.cleaned_data['start_range'],
                     end_range=bound_form.cleaned_data['end_range'],
                     saved=bound_form.cleaned_data['saved'])
+                filter.topics.set(bound_form.cleaned_data['topics'])
                 filter.save()
-        events_list = Event.objects.filter(is_published=True).filter(
-            location__in=locations_list).filter(
-            topics__in=topics_list).distinct().filter(
-            start_datetime__range=(actual_start, actual_end)).order_by('start_datetime')
-        context = {'events_list': events_list, 'active': 'events', 'cities': cities,
+            events_list = Event.objects.filter(is_published=True).filter(
+                location__in=locations_list).filter(
+                topics__in=topics_list).distinct().filter(
+                start_datetime__range=(actual_start, actual_end)).order_by('start_datetime')
+            context = {'events_list': events_list, 'active': 'events', 'bootstrap': 3}
+            return render(request, 'events/index.html', context)
+        # print(bound_form.cleaned_data['start_range'])
+        context = {'active': 'filter', 'cities': cities,
                    'topics': topics, 'form': bound_form, 'bootstrap': 3}
-        return render(request, 'events/index.html', context)
+        return render(request, 'events/filter.html', context)
 
     form = EventFiltersForm()
-    events_list = Event.objects.filter(is_published=True).filter(
-        start_datetime__range=(actual_start, actual_end)).order_by('start_datetime')
-    context = {'events_list': events_list, 'active': 'events', 'cities': cities,
+    context = {'active': 'filter', 'cities': cities,
                'topics': topics, 'form': form, 'bootstrap': 3}
-    return render(request, 'events/index.html', context)
-
+    return render(request, 'events/filter.html', context)
 
 # view-функция для фильтра по slug Location
 def location_events(request, slug):
@@ -60,26 +72,26 @@ def location_events(request, slug):
     return render(request, "location.html", {"location": location, "events": events})
 
 
-# @login_required
-# def new_event(request):
-#     if request.method == 'POST':
-#         bound_form = EventFiltersForm(request.POST)
-#         if bound_form.is_valid():
-#             user = auth(request)['user']
-#             city = bound_form.cleaned_data['city']
-#             topics = bound_form.cleaned_data['topics']
-#             start_range = bound_form.cleaned_data['start_range']
-#             end_range = bound_form.cleaned_data['end_range']
-#             saved = bound_form.cleaned_data['saved']
-#             filter = EventFilters.objects.create(user=user, city=city, topics=topics,
-#                                                  start_range=start_range, end_range=end_range)
-#             if saved:
-#                 filter.save()
-#             return redirect('/')
-#         return render(request, 'events/events.html', {'form': bound_form})
-#
-#     form = EventFiltersForm()
-#     return render(request, 'events/events.html', context={'form': form})
+@login_required
+def new_event(request):
+    if request.method == 'POST':
+        bound_form = EventForm(request.POST)
+        if bound_form.is_valid():
+            user = auth(request)['user']
+            city = bound_form.cleaned_data['city']
+            topics = bound_form.cleaned_data['topics']
+            start_range = bound_form.cleaned_data['start_range']
+            end_range = bound_form.cleaned_data['end_range']
+            saved = bound_form.cleaned_data['saved']
+            filter = EventFilters.objects.create(user=user, city=city, topics=topics,
+                                                 start_range=start_range, end_range=end_range)
+            if saved:
+                filter.save()
+            return redirect('/')
+        return render(request, 'events/events.html', {'form': bound_form})
+
+    form = EventForm()
+    return render(request, 'events/events.html', context={'form': form})
 
 def event(request, slug):
     cur_event = get_object_or_404(Event, slug=slug)

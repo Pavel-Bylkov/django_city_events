@@ -15,7 +15,9 @@
 
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
+    {% if form %}
     {{ form.media }}
+    {% endif %}
     {% block extracss %}{% endblock %}
     <title>{% block title %}My title{% endblock %}</title>
 </head>
@@ -31,13 +33,31 @@
                     <ul class="nav navbar-nav">
                         <!-- <li {% if active == "home" %}class="active"{% endif %}><a href="/">Home</a></li> -->
                         <!-- <li {% if active == "home" %}class="active"{% endif %}><a href="/#about">About</a></li> -->
-                        <li {% if active == "events" %}class="active"{% endif %}><a href="/events/">All Events</a></li>
+                        <li> {% if active == "events" %}class="active"{% endif %}<a href="/events/">Все события</a></li>
+                        <li> {% if active == "filter" %}class="active"{% endif %}<a href="/filter/">Задать фильтр</a></li>
 
                     </ul>
                 </div><!--/.nav-collapse -->
+                 {% if user.is_authenticated %}
+                    Пользователь: {{ user.username }}.
+                     <a class="p-2 text-dark" href="{% url 'new_event' %}">Новое событие</a>
+                     <a class="p-2 text-dark" href="{% url 'my_filters' %}">Мои фильтры</a>
+                     <a class="p-2 text-dark" href="{% url 'my_notify' %}">Уведомления {{ user.notifies.count }}</a>
+                     <a class="p-2 text-dark" href="{% url 'password_change' %}">Изменить пароль</a>
+                     <a class="p-2 text-dark" href="{% url 'logout' %}">Выйти</a>
+                {% else %}
+                     <a class="p-2 text-dark" href="{% url 'login' %}">Войти</a> |
+                     <a class="p-2 text-dark" href="{% url 'signup' %}">Регистрация</a>
+                {% endif %}
             </div>
         </nav>
     </header>
+    <div class="container-fluid">
+    <h1 class="text-center tk-cooper-black-std"> </h1>
+    </div>
+    <div class="container-fluid">
+    <h1 class="text-center tk-cooper-black-std"> </h1>
+    </div>
 
     {% block content %}{% endblock %}
 
@@ -53,12 +73,9 @@
     </footer>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" crossorigin="anonymous"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="{% static 'js/bootstrap.min.js' %}"></script>
-
-    <script type="text/javascript" src="//use.typekit.net/kal4hup.js"></script>
-    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
     {% block extrajs %} {% endblock %}
 </body>
 </html>
