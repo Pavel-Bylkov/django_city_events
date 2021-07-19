@@ -1,0 +1,33 @@
+<div class="container-fluid">
+    <form class="form-inline" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+{#        <div class="form-group">#}
+{#                {{ form.city.label }}#}
+{#                {{ form.city }}#}
+{#            </div>#}
+{#            <div class="form-group">#}
+{#                {{ form.topics.label }}#}
+{#                {{ form.topics }}#}
+{#            </div>#}
+{#        <div class="form-group">#}
+{#        {{ form.start_range.label }}#}
+{#        {{ form.start_range }}#}
+{#            <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>#}
+{#					<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>#}
+{#      </div>#}
+{#      <div class="form-group">#}
+{#        {{ form.end_range.label }}#}
+{#        {{ form.end_range }}#}
+{#          <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>#}
+{#					<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>#}
+{#      </div>#}
+{#        {% if user.is_authenticated %}#}
+{#          <div class="checkbox">#}
+{#                {{ form.saved.label }}#}
+{#                {{ form.saved }}#}
+{#          </div>#}
+{#        {% endif %}#}
+      <button type="submit" class="btn btn-default">Show events</button>
+    </form>
+</div>
