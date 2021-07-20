@@ -31,13 +31,13 @@
         <div class="col-md-10">
             <h3 class="tk-cooper-black-std">
                 <small>
-                    <span class="label label-info">[{{ notify.create_datetime|date:"d M Y" }} - {{ notify.create_datetime|time:"H:i" }}]</span>
-                    <span class="label label-info"> {{ notify.title }}</span>
+                    <span class="highlight">[{{ notify.create_datetime|date:"d M Y" }} - {{ notify.create_datetime|time:"H:i" }}]</span>
+                    <span class="highlight"> {{ notify.title }}</span>
                 </small>
             </h3>
             <div class="row">
                 <p class="col-md-8">
-                    <span class="label label-info"> {{ notify.msg }}</span>
+                    <span class="highlight"> {{ notify.msg }}</span>
                 </p>
             </div>
         </div>

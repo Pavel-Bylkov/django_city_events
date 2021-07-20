@@ -78,21 +78,25 @@ def new_event(request):
             if cityform.is_valid():
                 cityform.save()
                 city = cityform.cleaned_data['name']
+                cityform = CityForm(prefix='addcity')
         if 'addloc' in request.POST:
             locationform = LocationForm(request.POST, prefix='addloc')
             if locationform.is_valid():
                 locationform.save()
                 location = locationform.cleaned_data['venue']
+                locationform = LocationForm(prefix='addloc')
         if 'addtopic' in request.POST:
             topicform = TopicForm(request.POST, prefix='addtopic')
             if topicform.is_valid():
                 topicform.save()
                 topic = topicform.cleaned_data['name']
+                topicform = TopicForm(prefix='addtopic')
         if 'newevent' in request.POST:
             eventform = EventForm(request.POST, prefix='newevent')
             if eventform.is_valid():
                 eventform.save()
                 newevent = eventform.cleaned_data['title']
+                eventform = EventForm(prefix='newevent')
     context = {'cityform': cityform, 'locationform': locationform,
                'topicform': topicform, 'eventform': eventform, 'city': city,
                'location': location, 'topic': topic, 'newevent': newevent,

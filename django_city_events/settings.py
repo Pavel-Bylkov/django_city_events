@@ -112,7 +112,7 @@ EMAIL_HOST_USER = 'bfplus@yandex.ru'
 EMAIL_HOST_PASSWORD = '3j2ET7s55wW86Q823I'
 EMAIL_PORT = 25
 EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = 'City Events <no-reply@cityevents.ru>'
+DEFAULT_FROM_EMAIL = 'bfplus@yandex.ru'
 
 
 
@@ -156,5 +156,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_URL = "/auth/login/"
 LOGIN_REDIRECT_URL = "index"
-LOGOUT_URL = '/logout'
-LOGOUT_REDIRECT_URL = '/thanks'
+LOGOUT_URL = '/logout/'
+LOGOUT_REDIRECT_URL = 'index'

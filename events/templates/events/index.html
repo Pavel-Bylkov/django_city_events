@@ -14,12 +14,7 @@
 
 
 {% block content %}
-    <div class="container-fluid">
-    <h1 class="text-center tk-cooper-black-std"> </h1>
-    </div>
-    <div class="container-fluid">
-    <h1 class="text-center tk-cooper-black-std"> </h1>
-    </div>
+
 <h1 id="events" class="text-center tk-cooper-black-std">Предстоящие события</h1>
 <div class="container-fluid">
 
@@ -27,10 +22,9 @@
 
     {% if events_list %}
         {% for event in events_list %}
-        {% url event.get_absolute_url as the_url %}
         <div class="col-md-2"></div>
         <div class="col-md-10">
-            <h2 class="tk-cooper-black-std"> <a href="{{ the_url }}">{{event.title}}</a>
+            <h2 class="tk-cooper-black-std"> <a href="{{ event.get_absolute_url }}">{{event.title}}</a>
             </h2>
             <h3 class="tk-cooper-black-std">
                 <small>
@@ -61,7 +55,7 @@
                 {% endif %}
                 </section>
                 <section class="col-md-2">
-                <a href="{{ the_url }}" class="btn btn-success btn-lg" role="button">Подробнее <span class="glyphicon glyphicon-chevron-right"></span></a>
+                <a href="{{ event.get_absolute_url }}" class="btn btn-success btn-lg" role="button">Подробнее <span class="glyphicon glyphicon-chevron-right"></span></a>
                 </section>
             </div>
         </div>
@@ -83,10 +77,9 @@
 <div class="container-fluid">
     <div class="row events">
         {% for event in events_past %}
-        {% url event.get_absolute_url as the_url %}
         <div class="col-md-2"></div>
         <div class="col-md-10">
-            <h2 class="tk-cooper-black-std"> <a href="{{ the_url }}">{{event.title}}</a>
+            <h2 class="tk-cooper-black-std"> <a href="{{ event.get_absolute_url }}">{{event.title}}</a>
             </h2>
             <h3 class="tk-cooper-black-std">
                 <small>
@@ -115,7 +108,7 @@
                 {% endif %}
                 </section>
                 <section class="col-md-2">
-                <a href="{{ the_url }}" class="btn btn-success btn-lg" role="button">Подробнее <span class="glyphicon glyphicon-chevron-right"></span></a>
+                <a href="{{ event.get_absolute_url }}" class="btn btn-success btn-lg" role="button">Подробнее <span class="glyphicon glyphicon-chevron-right"></span></a>
                 </section>
             </div>
         </div>

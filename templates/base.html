@@ -42,11 +42,11 @@
                         {% if user.is_authenticated %}
                              <li> {% if active == "new_event" %}class="active"{% endif %}<a class="p-2 text-dark" href="{% url 'new_event' %}">Новое событие</a>
                              <li> {% if active == "my_filters" %}class="active"{% endif %}<a class="p-2 text-dark" href="{% url 'my_filters' %}">Мои фильтры</a>
-                             <li> {% if active == "my_notify" %}class="active"{% endif %}<a class="p-2 text-dark" href="{% url 'my_notify' %}">Уведомления {{ user.notifies.order_set.count }}</a>
+                             <li> {% if active == "my_notify" %}class="active"{% endif %}<a class="p-2 text-dark" href="{% url 'my_notify' %}">Уведомления {{ user.notifies.count }}</a>
                              <li> {% if active == "password_change" %}class="active"{% endif %}<a class="p-2 text-dark" href="{% url 'password_change' %}">Изменить пароль</a>
                              <li> {% if active == "logout" %}class="active"{% endif %}<a class="p-2 text-dark" href="{% url 'logout' %}">Выйти</a>
                         {% else %}
-                             <li> {% if active == "login" %}class="active"{% endif %}<a class="p-2 text-dark" href="{% url 'login' %}">Войти</a> |
+                             <li> {% if active == "login" %}class="active"{% endif %}<a class="p-2 text-dark" href="{% url 'login' %}">Войти</a>
                              <li> {% if active == "signup" %}class="active"{% endif %}<a class="p-2 text-dark" href="{% url 'signup' %}">Регистрация</a>
                         {% endif %}
                     </ul>
@@ -55,6 +55,12 @@
         </nav>
     </header>
     <div class="container-fluid">
+    <h1 class="text-center tk-cooper-black-std"> </h1>
+    </div>
+    <div class="container-fluid">
+    <h1 class="text-center tk-cooper-black-std"> </h1>
+    </div>
+        <div class="container-fluid">
     <h1 class="text-center tk-cooper-black-std"> </h1>
     </div>
     <div class="container-fluid">

@@ -50,7 +50,7 @@ class TopicForm(forms.ModelForm):
         fields = ["name", "description"]
         labels = {
             'name': 'Название',
-            'description': 'Выберите страну'
+            'description': 'Описание темы'
         }
         widgets = {
             'name': forms.TextInput(),

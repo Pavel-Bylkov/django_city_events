@@ -6,7 +6,7 @@ from django.utils import timezone
 from django.utils.text import slugify
 from django.core.mail import send_mail
 from django.contrib.auth import get_user_model
-
+from django.conf import settings
 
 User = get_user_model()
 
@@ -58,7 +58,7 @@ class Topics(models.Model):
 
 class EventFilters(models.Model):
     user = models.ForeignKey(User, blank=False, related_name='filters', on_delete=models.CASCADE)
-    city = models.ForeignKey(City, null=False, blank=True, on_delete=models.CASCADE)
+    city = models.ForeignKey(City, null=True, blank=True, on_delete=models.CASCADE)
     topics = models.ManyToManyField(Topics, blank=True)
     start_range = models.DateTimeField(auto_now=False, auto_now_add=False,
                                           null=True, blank=True)
@@ -95,6 +95,7 @@ class Event(models.Model):
         self.slug = slugify(self.title)
         # Notify by mail
         if not self.id:
+            super(Event, self).save(*args, **kwargs)
             users = get_users(self.location.city, self.topics, self.start_datetime)
             if users and len(users) > 0:
                 title = f'Created event "{self.title}"'
@@ -105,10 +106,11 @@ class Event(models.Model):
                     NOTIFICATIONS_EMAILS.append(user.email)
                     notify = Notifications.objects.create(user=user, title=title, msg=msg)
                     notify.save()
-                send_mail(title, msg, 'city_events <no-reply@cityevents.ru>',
+                send_mail(title, msg, settings.DEFAULT_FROM_EMAIL,
                       NOTIFICATIONS_EMAILS, fail_silently=False,)
-        super(Event, self).save(*args, **kwargs)
-        if not self.slug:
+        else:
+            super(Event, self).save(*args, **kwargs)
+        if not self.slug or self.slug == ' ':
             self.slug = 'event-' + str(self.id)
             self.save()
 
@@ -133,7 +135,10 @@ class Notifications(models.Model):
 def get_users(city, topics, start_datetime):
     filters = EventFilters.objects.all()
     filter_city = filters.filter(city=city) if city else None
-    filter_topics = filters.filter(topics__in=topics) if topics else None
+    filter_topics = []
+    if topics:
+        for topic in topics.all():
+            filter_topics.append(filters.filter(topics__in=topic))
     filter_start = filters.filter(start_range__gte=start_datetime) if start_datetime else None
     filter_end = filters.filter(start_range__lte=start_datetime) if start_datetime else None
     users = User.objects.filter(filters__in=filters)

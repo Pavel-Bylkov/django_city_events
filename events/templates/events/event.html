@@ -3,12 +3,11 @@
 {% block title %}{{event.title}}{% endblock %}
 
 
-{% load staticfiles %}
+{% load static %}
+
 {% block extracss %}
 
-<link rel="stylesheet" href="{% staticfiles 'events/css/style.css' %}" />
-
-
+<link rel="stylesheet" href="{% static 'events/css/style.css' %}" />
 {% endblock %}
 
 {#{% load my_md %}#}
@@ -25,32 +24,36 @@
                 {% endif %}
 
                 <section class="event-date-time">
-                    <span class="glyphicon glyphicon-map-marker"></span> <strong>{{event.location.venue}}</strong>, {{event.location.address1}}{% if event.location.address2 %}, {{event.location.address2}}{% endif %}, {{event.location.city|capfirst}}
+                    <span class="glyphicon glyphicon-map-marker"></span>
+                    <strong>{{event.location.venue}}</strong>,
+                    {{event.location.address1}}
+                    {% if event.location.address2 %}, {{event.location.address2}}{% endif %}
+                    , {{event.location.city|capfirst}}
                     <br/>
-                    <span class="glyphicon glyphicon-calendar"></span> {{event.start_datetime|date:"D, dS M Y"}} {{ event.start_datetime|time:"H:i" }} till {{ event.end_datetime|time:"H:i" }}
+                    <span class="glyphicon glyphicon-calendar"></span>
+                    <span class="highlight">{{event.start_datetime|date:"d M Y"}} ({{ event.start_datetime|time:"H:i" }}) - {{event.end_datetime|date:"d M Y"}} ({{ event.end_datetime|time:"H:i" }}) </span>
 
                 </section>
                 {% if not workshop_ended %}
-                <h3><span class="glyphicon glyphicon-time"></span> {{ event.start_datetime|timeuntil }} left to reserve your place.</h3>
+                <h3><span class="glyphicon glyphicon-time"></span>
+                    Начало через {{ event.start_datetime|timeuntil }} .</h3>
                 {% endif %}
 
-                <h2>Event details <small> {% for topic in event.topics.all %}<span class="label label-info">{{ topic }}</span> {% endfor %}</small></h2>
-
-                {{event.description|safe}}
-
-
-
+                <h2>Темы для обсуждения
+                    <small>
+                        {% for topic in event.topics.all %}
+                            <span class="label label-info">{{ topic }}</span>
+                        {% endfor %}
+                    </small>
+                </h2>
+                <h2>Подробное описание</h2>
+            <div class="row event">
+                    {{event.description|safe}}
+                </div>
             </div>
-        </div>
-
-        <div class="row event" id="faq">
-            <div class="col-md-5 col-md-offset-1">
-                {% include "disqus_common.html" %}
-            </div>
-
         </div>
     {% else %}
-        <h1>Whoops, no event here</h1>
+        <h1>Ошибка, такого события не найдено. </h1>
     {% endif %}
 
 
