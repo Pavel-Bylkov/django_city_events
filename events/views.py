@@ -5,8 +5,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.context_processors import auth
 from django.utils.timezone import now
 
-from .models import Event, EventFilters, User, Location, City, Topics
-from .forms import EventFiltersForm, EventForm
+from .models import Event, EventFilters, User, Location, City, Topics, Notifications
+from .forms import EventFiltersForm, EventForm, CityForm, TopicForm, LocationForm
 
 
 def index(request):
@@ -55,7 +55,6 @@ def event_filter(request):
                 start_datetime__range=(actual_start, actual_end)).order_by('start_datetime')
             context = {'events_list': events_list, 'active': 'events', 'bootstrap': 3}
             return render(request, 'events/index.html', context)
-        # print(bound_form.cleaned_data['start_range'])
         context = {'active': 'filter', 'cities': cities,
                    'topics': topics, 'form': bound_form, 'bootstrap': 3}
         return render(request, 'events/filter.html', context)
@@ -65,37 +64,44 @@ def event_filter(request):
                'topics': topics, 'form': form, 'bootstrap': 3}
     return render(request, 'events/filter.html', context)
 
-# view-функция для фильтра по slug Location
-def location_events(request, slug):
-    location = get_object_or_404(Location, slug=slug)
-    events = Event.objects.filter(location=location).order_by("start_datetime")[:20]
-    return render(request, "location.html", {"location": location, "events": events})
-
 
 @login_required
 def new_event(request):
+    cityform = CityForm(prefix='addcity')
+    locationform = LocationForm(prefix='addloc')
+    topicform = TopicForm(prefix='addtopic')
+    eventform = EventForm(prefix='newevent')
+    city = location = topic = newevent = None
     if request.method == 'POST':
-        bound_form = EventForm(request.POST)
-        if bound_form.is_valid():
-            user = auth(request)['user']
-            city = bound_form.cleaned_data['city']
-            topics = bound_form.cleaned_data['topics']
-            start_range = bound_form.cleaned_data['start_range']
-            end_range = bound_form.cleaned_data['end_range']
-            saved = bound_form.cleaned_data['saved']
-            filter = EventFilters.objects.create(user=user, city=city, topics=topics,
-                                                 start_range=start_range, end_range=end_range)
-            if saved:
-                filter.save()
-            return redirect('/')
-        return render(request, 'events/events.html', {'form': bound_form})
+        if 'addcity' in request.POST:
+            cityform = CityForm(request.POST, prefix='addcity')
+            if cityform.is_valid():
+                cityform.save()
+                city = cityform.cleaned_data['name']
+        if 'addloc' in request.POST:
+            locationform = LocationForm(request.POST, prefix='addloc')
+            if locationform.is_valid():
+                locationform.save()
+                location = locationform.cleaned_data['venue']
+        if 'addtopic' in request.POST:
+            topicform = TopicForm(request.POST, prefix='addtopic')
+            if topicform.is_valid():
+                topicform.save()
+                topic = topicform.cleaned_data['name']
+        if 'newevent' in request.POST:
+            eventform = EventForm(request.POST, prefix='newevent')
+            if eventform.is_valid():
+                eventform.save()
+                newevent = eventform.cleaned_data['title']
+    context = {'cityform': cityform, 'locationform': locationform,
+               'topicform': topicform, 'eventform': eventform, 'city': city,
+               'location': location, 'topic': topic, 'newevent': newevent,
+               'active': 'new_event'}
+    return render(request, 'events/new_event.html', context)
 
-    form = EventForm()
-    return render(request, 'events/events.html', context={'form': form})
 
 def event(request, slug):
     cur_event = get_object_or_404(Event, slug=slug)
-    print(cur_event)
     context = {"event": cur_event}
 
     workshop_ended = True
@@ -105,3 +111,19 @@ def event(request, slug):
 
     return render(request, 'events/event.html', context)
 
+@login_required
+def my_filters(request):
+    filters_list = EventFilters.objects.filter(
+        user=auth(request)['user']).order_by('-save_datetime')
+    context = {'filters_list': filters_list,
+               'active': 'my_filters', 'bootstrap': 3}
+    return render(request, 'events/my_filters.html', context)
+
+
+@login_required
+def my_notify(request):
+    notify_list = Notifications.objects.filter(
+        user=auth(request)['user']).order_by('-create_datetime')
+    context = {'notify_list': notify_list,
+               'active': 'my_notify', 'bootstrap': 3}
+    return render(request, 'events/my_notify.html', context)

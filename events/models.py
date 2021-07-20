@@ -38,6 +38,15 @@ class Location(models.Model):
     def __str__(self):
         return "{}, {}".format(self.venue, self.city)
 
+    def save(self, *args, **kwargs):
+        super(Location, self).save(*args, **kwargs)
+        if not self.slug:
+            self.slug = slugify(f"{self.venue}-{self.city}")
+            self.save()
+        if not self.slug:
+            self.slug = f"loc-{self.id}"
+            self.save()
+
 
 class Topics(models.Model):
     name = models.CharField(null=True, max_length=300, verbose_name='Заголовок темы')
@@ -56,6 +65,7 @@ class EventFilters(models.Model):
     end_range = models.DateTimeField(auto_now=False, auto_now_add=False,
                                         null=True, blank=True)
     saved = models.BooleanField(default=False)
+    save_datetime = models.DateTimeField(auto_now=True)
 
 class Event(models.Model):
     title = models.CharField(max_length=250, blank=False, verbose_name='Название события')
@@ -68,7 +78,7 @@ class Event(models.Model):
     location = models.ForeignKey(Location, blank=False, related_name='events',
                                  on_delete=models.CASCADE,
                                  verbose_name='Место проведения')
-    slug = models.SlugField(editable=False, blank=True)
+    slug = models.SlugField(blank=True)
     is_published = models.BooleanField(default=False)
     is_cancelled = models.BooleanField(default=False)
 

@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Уведомления{% endblock %}
+
+{% load static %}
+
+{% block extracss %}
+
+{#<link rel="stylesheet" href="{% static '/events/css/style.css' %}" />#}
+
+{% endblock %}
+
+
+{#{% load my_md %}#}
+
+
+{% block content %}
+    <div class="container-fluid">
+    <h1 class="text-center tk-cooper-black-std"> </h1>
+    </div>
+    <div class="container-fluid">
+    <h1 class="text-center tk-cooper-black-std"> </h1>
+    </div>
+<h1 id="my_notify" class="text-center tk-cooper-black-std">Уведомления</h1>
+<div class="container-fluid">
+
+    <div class="row events">
+
+    {% if notify_list %}
+        {% for notify in notify_list %}
+        <div class="col-md-2"></div>
+        <div class="col-md-10">
+            <h3 class="tk-cooper-black-std">
+                <small>
+                    <span class="label label-info">[{{ notify.create_datetime|date:"d M Y" }} - {{ notify.create_datetime|time:"H:i" }}]</span>
+                    <span class="label label-info"> {{ notify.title }}</span>
+                </small>
+            </h3>
+            <div class="row">
+                <p class="col-md-8">
+                    <span class="label label-info"> {{ notify.msg }}</span>
+                </p>
+            </div>
+        </div>
+            {% if not forloop.last %}<hr>{% endif %}
+        {% endfor %}
+    {% else %}
+        <div class="col-md-12 col-md-offset-1">
+            <h1><span class="glyphicon glyphicon-wrench"></span> Уведомления не найдены.</h1>
+        </div>
+    {% endif %}
+    </div>
+</div>
+
+{% endblock %}

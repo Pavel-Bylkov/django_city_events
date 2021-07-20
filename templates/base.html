@@ -27,7 +27,11 @@
         <nav class="navbar navbar-inverse navbar-fixed-top">
             <div class="container">
                 <div class="navbar-header">
-                    <a class="navbar-brand" href="/" ><span class="glyphicon glyphicon-home"></span> City Events</a>
+                    {% if user.is_authenticated %}
+                        <a class="navbar-brand" href="/" ><span class="glyphicon glyphicon-home"></span>{{ user.username }}</a>
+                    {% else %}
+                        <a class="navbar-brand" href="/" ><span class="glyphicon glyphicon-home"></span> City Events </a>
+                    {% endif %}
                 </div>
                 <div id="navbar" class="collapse navbar-collapse">
                     <ul class="nav navbar-nav">
@@ -35,20 +39,18 @@
                         <!-- <li {% if active == "home" %}class="active"{% endif %}><a href="/#about">About</a></li> -->
                         <li> {% if active == "events" %}class="active"{% endif %}<a href="/events/">Все события</a></li>
                         <li> {% if active == "filter" %}class="active"{% endif %}<a href="/filter/">Задать фильтр</a></li>
-
+                        {% if user.is_authenticated %}
+                             <li> {% if active == "new_event" %}class="active"{% endif %}<a class="p-2 text-dark" href="{% url 'new_event' %}">Новое событие</a>
+                             <li> {% if active == "my_filters" %}class="active"{% endif %}<a class="p-2 text-dark" href="{% url 'my_filters' %}">Мои фильтры</a>
+                             <li> {% if active == "my_notify" %}class="active"{% endif %}<a class="p-2 text-dark" href="{% url 'my_notify' %}">Уведомления {{ user.notifies.order_set.count }}</a>
+                             <li> {% if active == "password_change" %}class="active"{% endif %}<a class="p-2 text-dark" href="{% url 'password_change' %}">Изменить пароль</a>
+                             <li> {% if active == "logout" %}class="active"{% endif %}<a class="p-2 text-dark" href="{% url 'logout' %}">Выйти</a>
+                        {% else %}
+                             <li> {% if active == "login" %}class="active"{% endif %}<a class="p-2 text-dark" href="{% url 'login' %}">Войти</a> |
+                             <li> {% if active == "signup" %}class="active"{% endif %}<a class="p-2 text-dark" href="{% url 'signup' %}">Регистрация</a>
+                        {% endif %}
                     </ul>
                 </div><!--/.nav-collapse -->
-                 {% if user.is_authenticated %}
-                    Пользователь: {{ user.username }}.
-                     <a class="p-2 text-dark" href="{% url 'new_event' %}">Новое событие</a>
-                     <a class="p-2 text-dark" href="{% url 'my_filters' %}">Мои фильтры</a>
-                     <a class="p-2 text-dark" href="{% url 'my_notify' %}">Уведомления {{ user.notifies.count }}</a>
-                     <a class="p-2 text-dark" href="{% url 'password_change' %}">Изменить пароль</a>
-                     <a class="p-2 text-dark" href="{% url 'logout' %}">Выйти</a>
-                {% else %}
-                     <a class="p-2 text-dark" href="{% url 'login' %}">Войти</a> |
-                     <a class="p-2 text-dark" href="{% url 'signup' %}">Регистрация</a>
-                {% endif %}
             </div>
         </nav>
     </header>
