@@ -19,10 +19,6 @@
 
         <div class="row event">
             <div class="col-md-5 col-md-offset-1" id="description">
-                {% if event.is_cancelled %}
-                <h3 class="alert alert-danger text-center" role="alert">CANCELLED</h3>
-                {% endif %}
-
                 <section class="event-date-time">
                     <span class="glyphicon glyphicon-map-marker"></span>
                     <strong>{{event.location.venue}}</strong>,

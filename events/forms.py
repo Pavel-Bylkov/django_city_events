@@ -82,8 +82,7 @@ class EventForm(forms.ModelForm):
     class Meta:
         model = Event
         fields = ["title", 'description', 'topics', 'start_datetime',
-                  'end_datetime', 'location', 'is_published',
-                  'is_cancelled']
+                  'end_datetime', 'location', 'is_published']
         labels = {
             'title': 'Название события',
             'description': 'Описание',
@@ -91,8 +90,7 @@ class EventForm(forms.ModelForm):
             'topics': 'Обсуждаемые темы',
             'start_datetime': 'Дата и время начала (dd/mm/yyyy hh:ii или dd.mm.yyyy hh:ii)',
             'end_datetime': 'Дата и время окончания (dd/mm/yyyy hh:ii или dd.mm.yyyy hh:ii)',
-            'is_published': 'Опубликовать',
-            'is_cancelled': 'Отменить'
+            'is_published': 'Опубликовать'
         }
         dateTimeOptions = {
             'format': 'dd/mm/yyyy hh:ii',
@@ -102,11 +100,12 @@ class EventForm(forms.ModelForm):
             'title': forms.TextInput(),
             'description': forms.Textarea(),
             'location': forms.Select(),
-            'topics': forms.SelectMultiple(),
-            'start_datetime': DateTimeWidget(attrs={'id': "id_start_datetime"},
+            'topics': forms.SelectMultiple(attrs={'required': True}),
+            'start_datetime': DateTimeWidget(attrs={'id': "id_start_datetime", 'class': "form-control",
+                                                    'required': True},
                                           options=dateTimeOptions, bootstrap_version=3),
-            'end_datetime': DateTimeWidget(attrs={'id': "id_end_datetime"},
+            'end_datetime': DateTimeWidget(attrs={'id': "id_end_datetime", 'class': "form-control",
+                                                    'required': True},
                                           options=dateTimeOptions, bootstrap_version=3),
-            'is_published': forms.CheckboxInput(),
-            'is_cancelled': forms.CheckboxInput()
+            'is_published': forms.CheckboxInput()
         }

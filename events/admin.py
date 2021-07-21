@@ -18,7 +18,7 @@ admin.site.register(City, CityAdmin)
 
 class EventAdmin(admin.ModelAdmin):
     list_display = ("title", "pub_datetime",
-                    "location", "slug", "is_cancelled", "is_published")
+                    "location", "slug", "is_published")
     list_filter = ["pub_datetime", "start_datetime"]
     search_fields = ["title", "description"]
     raw_id_fields = ("location", )

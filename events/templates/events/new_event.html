@@ -1,18 +1,6 @@
 {% extends "base.html" %}
 {% block title %}New Event{% endblock %}
 
-{% load static %}
-
-{% block extracss %}
-
-{#<link rel="stylesheet" href="{% static '/events/css/style.css' %}" />#}
-
-{% endblock %}
-
-
-{#{% load my_md %}#}
-
-
 {% block content %}
     <div class="container-fluid">
     <h1 class="text-center tk-cooper-black-std"> </h1>
@@ -21,47 +9,16 @@
     <h1 class="text-center tk-cooper-black-std"> </h1>
     </div>
 <h1 id="new_event" class="text-center tk-cooper-black-std">Новое событие</h1>
-    <h2 class="text-center tk-cooper-black-std">Если вашего города нет в списке городов, добавьте его</h2>
-{% if city %}<ul class="alert-success"><li> Город {{ city }} добавлен.</li></ul>{% endif %}
-    <div class="row-field">
-    <form action="" method="POST" class="form-group">
-        {% csrf_token %}
-        {{ cityform.as_p }}
-        <br/>
-      <button type="submit" class="btn btn-default" name="addcity">Добавить</button>
-    </form>
-</div>
-    <hr>
-    <h2 class="text-center tk-cooper-black-std">Если вашего места проведения нет в списке, добавьте его</h2>
-{% if location %}<ul class="alert-success"><li> Место проведения {{ location }} добавлено.</li></ul>{% endif %}
-    <div class="row-field">
-    <form action="" method="POST" class="form-group">
-        {% csrf_token %}
-        {{ locationform.as_p }}
-        <br/>
-      <button type="submit" class="btn btn-default" name="addloc">Добавить</button>
-    </form>
-</div>
-    <hr>
-<h2 class="text-center tk-cooper-black-std">Если вашей темы нет в списке тем, добавьте ее</h2>
-{% if topic %}<ul class="alert-success"><li> Тема {{ topic }} добавлена.</li></ul>{% endif %}
-    <div class="row-field">
-    <form action="" method="POST" class="form-group">
-        {% csrf_token %}
-        {{ topicform.as_p }}
-        <br/>
-      <button type="submit" class="btn btn-default" name="addtopic">Добавить</button>
-    </form>
-</div>
-    <hr>
     <h2 class="text-center tk-cooper-black-std">После добавления города, места проведения и тем создайте новое событие</h2>
-{% if newevent %}<ul class="alert-success"><li> Событие {{ newevent }} создано.</li></ul>{% endif %}
+
     <div class="row-field">
+
     <form action="" method="POST" class="form-group">
         {% csrf_token %}
-        {{ eventform.as_p }}
+        {{ form.as_p }}
         <br/>
-      <button type="submit" class="btn btn-default" name="newevent">Создать</button>
+      <button type="submit" class="btn btn-default">Создать</button>
     </form>
+    {% if newevent %}<ul class="alert-success"><li> Событие {{ newevent }} создано.</li></ul>{% endif %}
 </div>
 {% endblock %}
