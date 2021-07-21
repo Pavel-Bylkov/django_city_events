@@ -67,6 +67,9 @@ class EventFilters(models.Model):
     saved = models.BooleanField(default=False)
     save_datetime = models.DateTimeField(auto_now=True)
 
+    def get_absolute_url(self):
+        return reverse('apply_filter', kwargs={'id': self.id})
+
 class Event(models.Model):
     title = models.CharField(max_length=250, blank=False, verbose_name='Название события')
     description = models.TextField(blank=True, null=False, verbose_name='Описание')

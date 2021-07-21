@@ -68,6 +68,9 @@
                 </section>
                 </div>
             {% endif %}
+                <section class="col-md-2">
+                <a href="{{ filter.get_absolute_url }}" class="btn btn-success btn-lg" role="button">Применить <span class="glyphicon glyphicon-chevron-right"></span></a>
+                </section>
         </div>
             {% if not forloop.last %}<hr>{% endif %}
         {% endfor %}

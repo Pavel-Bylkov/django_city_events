@@ -53,7 +53,7 @@ def event_filter(request):
                 location__in=locations_list).filter(
                 topics__in=topics_list).distinct().filter(
                 start_datetime__range=(actual_start, actual_end)).order_by('start_datetime')
-            context = {'events_list': events_list, 'active': 'events', 'bootstrap': 3}
+            context = {'events_list': events_list, 'bootstrap': 3}
             return render(request, 'events/index.html', context)
         context = {'active': 'filter', 'cities': cities,
                    'topics': topics, 'form': bound_form, 'bootstrap': 3}
@@ -131,3 +131,18 @@ def my_notify(request):
     context = {'notify_list': notify_list,
                'active': 'my_notify', 'bootstrap': 3}
     return render(request, 'events/my_notify.html', context)
+
+
+@login_required
+def apply_filter(request, id):
+    filter = EventFilters.objects.get(id=id)
+    locations_list = Location.objects.filter(city=filter.city) if filter.city else []
+    topics_list = list(filter.topics) if filter.topics else []
+    actual_start = filter.start_range if filter.start_range else None
+    actual_end = filter.end_range if filter.end_range else None
+    events_list = Event.objects.filter(is_published=True).filter(
+        location__in=locations_list).filter(
+        topics__in=topics_list).distinct().filter(
+        start_datetime__gte=actual_start, start_datetime__lte=actual_end).order_by('start_datetime')
+    context = {'events_list': events_list, 'bootstrap': 3}
+    return render(request, 'events/index.html', context)
