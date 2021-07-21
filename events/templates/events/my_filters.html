@@ -65,12 +65,18 @@
                 <section class="col-md-8">
                     <span class="glyphicon glyphicon-calendar"></span>
                     <span class="highlight">{{ filter.end_range|date:"d M Y" }} ({{ filter.end_range|time:"H:i" }})</span>
+
                 </section>
                 </div>
             {% endif %}
+        <div class="row">
+            <section class="col-md-7">
+
+                </section>
                 <section class="col-md-2">
                 <a href="{{ filter.get_absolute_url }}" class="btn btn-success btn-lg" role="button">Применить <span class="glyphicon glyphicon-chevron-right"></span></a>
                 </section>
+        </div>
         </div>
             {% if not forloop.last %}<hr>{% endif %}
         {% endfor %}

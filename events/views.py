@@ -7,13 +7,12 @@ from django.utils.timezone import now
 
 from .models import Event, EventFilters, User, Location, City, Topics, Notifications
 from .forms import EventFiltersForm, EventForm, CityForm, TopicForm, LocationForm
-
+from .models import apply_filter as apply_f
 
 def index(request):
-    actual_start = now() - datetime.timedelta(days=1)
-    actual_end = now() + datetime.timedelta(days=30)
+    actual_start = now()
     events_list = Event.objects.filter(is_published=True).filter(
-        start_datetime__range=(actual_start, actual_end)).order_by('start_datetime')
+        start_datetime__gte=actual_start).order_by('start_datetime')
     events_past = Event.objects.filter(is_published=True).filter(
         start_datetime__lte=actual_start).order_by('-start_datetime')
     context = {'events_list': events_list, 'events_past': events_past,
@@ -22,14 +21,14 @@ def index(request):
 
 
 def event_filter(request):
-    actual_start = now() - datetime.timedelta(days=1)
-    actual_end = now() + datetime.timedelta(days=30)
-    locations_list = Location.objects.all()
     cities = City.objects.all()
     topics = Topics.objects.all()
     if request.method == 'POST':
         bound_form = EventFiltersForm(request.POST)
         topics_list = topics
+        actual_start = None
+        actual_end = None
+        locations_list = Location.objects.all()
         if bound_form.is_valid():
             if bound_form.cleaned_data['city']:
                 city = bound_form.cleaned_data['city']
@@ -50,10 +49,17 @@ def event_filter(request):
                 filter.topics.set(bound_form.cleaned_data['topics'])
                 filter.save()
             events_list = Event.objects.filter(is_published=True).filter(
-                location__in=locations_list).filter(
-                topics__in=topics_list).distinct().filter(
-                start_datetime__range=(actual_start, actual_end)).order_by('start_datetime')
-            context = {'events_list': events_list, 'bootstrap': 3}
+                location__in=locations_list.all()).filter(
+                topics__in=topics_list.all()).distinct()
+            if actual_start and actual_end:
+                events_list = events_list.filter(start_datetime__gte=actual_start,
+                                                 start_datetime__lte=actual_end)
+            elif actual_start:
+                events_list = events_list.filter(start_datetime__gte=actual_start)
+            elif actual_end:
+                events_list = events_list.filter(start_datetime__lte=actual_end)
+            events_list = events_list.distinct().order_by('start_datetime')
+            context = {'events_list': events_list, 'bootstrap': 3, 'search': True}
             return render(request, 'events/index.html', context)
         context = {'active': 'filter', 'cities': cities,
                    'topics': topics, 'form': bound_form, 'bootstrap': 3}
@@ -135,14 +141,7 @@ def my_notify(request):
 
 @login_required
 def apply_filter(request, id):
-    filter = EventFilters.objects.get(id=id)
-    locations_list = Location.objects.filter(city=filter.city) if filter.city else []
-    topics_list = list(filter.topics) if filter.topics else []
-    actual_start = filter.start_range if filter.start_range else None
-    actual_end = filter.end_range if filter.end_range else None
-    events_list = Event.objects.filter(is_published=True).filter(
-        location__in=locations_list).filter(
-        topics__in=topics_list).distinct().filter(
-        start_datetime__gte=actual_start, start_datetime__lte=actual_end).order_by('start_datetime')
-    context = {'events_list': events_list, 'bootstrap': 3}
+    f = EventFilters.objects.get(id=id)
+    events_list = apply_f(f).order_by('start_datetime')
+    context = {'events_list': events_list, 'bootstrap': 3, 'search': True}
     return render(request, 'events/index.html', context)

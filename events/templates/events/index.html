@@ -14,9 +14,12 @@
 
 
 {% block content %}
-
+{% if search %}
+    <h1 id="events" class="text-center tk-cooper-black-std">Найденные события</h1>
+    {% else %}
 <h1 id="events" class="text-center tk-cooper-black-std">Предстоящие события</h1>
-<div class="container-fluid">
+{% endif %}
+    <div class="container-fluid">
 
     <div class="row events">
 
@@ -73,7 +76,7 @@
     </div>
 </div>
  {% if events_past %}
-    <h1 id="events_past" class="text-center tk-cooper-black-std">Прошедшие события</h1>
+    <h1 id="events_past" class="text-center tk-cooper-black-std">Текущие и прошедшие события</h1>
 <div class="container-fluid">
     <div class="row events">
         {% for event in events_past %}

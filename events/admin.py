@@ -1,5 +1,5 @@
 from django.contrib import admin
-from events.models import Country, City, Event, Topics, Location, EventFilters
+from events.models import Country, City, Event, Topics, Location, EventFilters, Notifications
 
 
 class CountryAdmin(admin.ModelAdmin):
@@ -35,10 +35,6 @@ admin.site.register(Topics, TopicsAdmin)
 
 
 class LocationAdmin(admin.ModelAdmin):
-    fieldsets = [
-        ("Location details",    {"fields": ["venue", "address1", "address2", "city"]}),
-        (None,                  {"fields": ["slug"]}),
-    ]
     list_display = ("venue", "address1", "address2", "city")
     search_fields = ["venue", "address1", "address2", "city"]
 
@@ -53,4 +49,9 @@ class EventFiltersAdmin(admin.ModelAdmin):
 admin.site.register(EventFilters, EventFiltersAdmin)
 
 
+class NotificationsAdmin(admin.ModelAdmin):
+    list_display = ("user", "title", "msg", "is_read", "create_datetime")
+
+
+admin.site.register(Notifications, NotificationsAdmin)
 

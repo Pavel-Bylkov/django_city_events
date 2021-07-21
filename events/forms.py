@@ -87,10 +87,10 @@ class EventForm(forms.ModelForm):
         labels = {
             'title': 'Название события',
             'description': 'Описание',
-            'topics': 'Обсуждаемые темы',
-            'start_datetime': 'Дата и время начала',
-            'end_datetime': 'Дата и время окончания',
             'location': 'Место проведения',
+            'topics': 'Обсуждаемые темы',
+            'start_datetime': 'Дата и время начала (dd/mm/yyyy hh:ii или dd.mm.yyyy hh:ii)',
+            'end_datetime': 'Дата и время окончания (dd/mm/yyyy hh:ii или dd.mm.yyyy hh:ii)',
             'is_published': 'Опубликовать',
             'is_cancelled': 'Отменить'
         }
@@ -101,12 +101,12 @@ class EventForm(forms.ModelForm):
         widgets = {
             'title': forms.TextInput(),
             'description': forms.Textarea(),
+            'location': forms.Select(),
             'topics': forms.SelectMultiple(),
             'start_datetime': DateTimeWidget(attrs={'id': "id_start_datetime"},
                                           options=dateTimeOptions, bootstrap_version=3),
             'end_datetime': DateTimeWidget(attrs={'id': "id_end_datetime"},
                                           options=dateTimeOptions, bootstrap_version=3),
-            'location': forms.Select(),
             'is_published': forms.CheckboxInput(),
             'is_cancelled': forms.CheckboxInput()
         }
