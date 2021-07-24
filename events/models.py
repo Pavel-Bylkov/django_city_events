@@ -10,14 +10,14 @@ User = get_user_model()
 
 
 class Country(models.Model):
-    name = models.CharField(max_length=250, null=True)
+    name = models.CharField('Название страны', max_length=250, null=True)
 
     def __str__(self):
         return self.name
 
 
 class City(models.Model):
-    name = models.CharField(max_length=250, null=True)
+    name = models.CharField('Название города', max_length=250, null=True)
     country = models.ForeignKey(Country, null=True, blank=False,
                                 on_delete=models.CASCADE, related_name='cities')
 
@@ -26,9 +26,10 @@ class City(models.Model):
 
 
 class Location(models.Model):
-    venue = models.CharField(max_length=250, verbose_name='Место проведения')
-    address1 = models.CharField(blank=True, max_length=250)
-    address2 = models.CharField(blank=True, max_length=250)
+    """Место проведения мероприятий."""
+    venue = models.CharField('Место проведения', max_length=250)
+    address1 = models.CharField('Адрес1', blank=True, max_length=250)
+    address2 = models.CharField('Адрес2', blank=True, max_length=250)
     city = models.ForeignKey(City, null=True, blank=False, on_delete=models.CASCADE,
                              related_name='locations')
     slug = models.SlugField(null=True, help_text="Например: crocuscityhall-moscow")
@@ -47,14 +48,16 @@ class Location(models.Model):
 
 
 class Topics(models.Model):
-    name = models.CharField(null=True, max_length=300, verbose_name='Заголовок темы')
-    description = models.TextField(blank=True, null=True, verbose_name='Описание')
+    """Тема для обсуждения"""
+    name = models.CharField('Заголовок темы', null=True, max_length=300)
+    description = models.TextField('Описание', blank=True, null=True)
 
     def __str__(self):
         return self.name
 
 
 class EventFilters(models.Model):
+    """Сохраненные поля фильтра для поиска событий"""
     user = models.ForeignKey(User, blank=False, related_name='filters', on_delete=models.CASCADE)
     city = models.ForeignKey(City, null=True, blank=True, on_delete=models.CASCADE)
     topics = models.ManyToManyField(Topics, blank=True)
@@ -70,16 +73,17 @@ class EventFilters(models.Model):
 
 
 class Event(models.Model):
-    title = models.CharField(max_length=250, blank=False, verbose_name='Название события')
-    description = models.TextField(blank=True, null=False, verbose_name='Описание')
+    """Событие - описание, место и сроки проведения"""
+    title = models.CharField('Название события', max_length=250, blank=False)
+    description = models.TextField('Описание', blank=True, null=False)
     topics = models.ManyToManyField(Topics, blank=False, related_name='events',
                                     verbose_name='Темы')
     location = models.ForeignKey(Location, blank=False, related_name='events',
                                  on_delete=models.CASCADE,
                                  verbose_name='Место проведения')
     pub_datetime = models.DateTimeField(auto_now=True)
-    start_datetime = models.DateTimeField(auto_now=False, auto_now_add=False, blank=False)
-    end_datetime = models.DateTimeField(auto_now=False, auto_now_add=False, blank=False)
+    start_datetime = models.DateTimeField('Дата-время начала', auto_now=False, auto_now_add=False, blank=False)
+    end_datetime = models.DateTimeField('Дата-время окончания', auto_now=False, auto_now_add=False, blank=False)
     slug = models.SlugField(blank=True)
     is_published = models.BooleanField(default=False)
 
@@ -105,9 +109,10 @@ class Event(models.Model):
 
 
 class Notifications(models.Model):
+    """Уведомление пользователя о новых событиях по выбранным фильтрам"""
     user = models.ForeignKey(User, blank=False, related_name='notifies', on_delete=models.CASCADE)
-    title = models.CharField(max_length=250, blank=False, verbose_name='Заголовок')
-    msg = models.TextField(blank=True, null=False, verbose_name='Сообщение')
+    title = models.CharField('Заголовок', max_length=250, blank=False)
+    msg = models.TextField('Сообщение', blank=True, null=False)
     is_read = models.BooleanField(default=False)
     create_datetime = models.DateTimeField(auto_now=True)
 
